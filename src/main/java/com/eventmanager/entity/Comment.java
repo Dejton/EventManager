@@ -1,61 +1,30 @@
 package com.eventmanager.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
-
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
     private long id;
+    @Column(nullable = false)
     private String content;
-    @Column(name = "date_added")
+    @Column(name = "date_added", nullable = false)
     private Date dateAdded;
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private long userId;    // klucz obcy do User, jeden do wielu
-    @Column(name = "event_id")
+    @Column(name = "event_id", nullable = false)
     private long eventId;   // klucz obcy do Event, jeden do wielu
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getDateAdded() {
-        return dateAdded;
-    }
-
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
-    }
 }
