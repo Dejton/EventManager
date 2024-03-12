@@ -1,7 +1,6 @@
 package com.eventmanager.repository;
 
 import com.eventmanager.entity.Comment;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
