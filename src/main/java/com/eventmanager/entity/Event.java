@@ -1,71 +1,35 @@
 package com.eventmanager.entity;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "events")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")
     private long id;
+    @Column(nullable = false)
+    private String localization;
+    @Column(nullable = false, unique = true)
     private String title;
-    @Column(name = "starting_date")
-    private Date startingDate;
-    @Column(name = "ending_date")
-    private Date endingDate;
+    @Column(name = "starting_date", nullable = false)
+    private LocalDate startingDate;
+    @Column(name = "ending_date", nullable = false)
+    private LocalDate endingDate;
+    @Column(nullable = false)
     private String description;
-    @Column(name = "organizer_id")
+    @Column(name = "organizer_id", nullable = false)
     private long organizerId;   //   klucz obcy od User wiele do jednego
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Date getStartingDate() {
-        return startingDate;
-    }
-
-    public void setStartingDate(Date startingDate) {
-        this.startingDate = startingDate;
-    }
-
-    public Date getEndingDate() {
-        return endingDate;
-    }
-
-    public void setEndingDate(Date endingDate) {
-        this.endingDate = endingDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public long getOrganizerId() {
-        return organizerId;
-    }
-
-    public void setOrganizerId(long organizerId) {
-        this.organizerId = organizerId;
-    }
 }
