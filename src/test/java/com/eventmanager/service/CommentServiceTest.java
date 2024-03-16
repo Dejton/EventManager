@@ -1,6 +1,7 @@
 package com.eventmanager.service;
 
 import com.eventmanager.entity.Comment;
+import com.eventmanager.entity.dtos.CommentDto;
 import com.eventmanager.repository.CommentRepository;
 import com.eventmanager.service.impl.CommentServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ class CommentServiceTest {
     private final CommentRepository commentRepository = mock(CommentRepository.class);
     private final CommentServiceImpl commentService = new CommentServiceImpl(commentRepository);
     private Comment comment;
+    private CommentDto commentDto;
 
     @BeforeEach
     void setUp() {
@@ -34,6 +36,7 @@ class CommentServiceTest {
                 .userId(1)
                 .eventId(2)
                 .build();
+        commentDto = CommentDto.mapToDto(comment);
     }
 
     @DisplayName("testing save comment")
@@ -42,7 +45,7 @@ class CommentServiceTest {
 //        given
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 //        when
-        Comment savedComment = commentService.save(comment);
+        Comment savedComment = commentService.save(commentDto);
 //        then
         assertThat(savedComment).isNotNull();
         assertThat(savedComment).isEqualTo(comment);
@@ -64,7 +67,7 @@ class CommentServiceTest {
 //        given
         when(commentRepository.findAll()).thenReturn(List.of(comment));
 //        when
-        List<Comment> comments = commentService.findAll();
+        List<CommentDto> comments = commentService.findAll();
 //        then
         assertThat(comments).isNotEmpty();
         assertThat(comments.size()).isEqualTo(1);
@@ -76,7 +79,7 @@ class CommentServiceTest {
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
         comment.setContent("Wydarzenie odwołane");
 //        when
-        Comment updatedComment = commentService.save(comment);
+        Comment updatedComment = commentService.save(commentDto);
 //        then
         assertThat(updatedComment).isNotNull();
         assertThat(updatedComment.getContent()).isEqualTo("Wydarzenie odwołane");
@@ -87,10 +90,10 @@ class CommentServiceTest {
 //        given
         when(commentRepository.findById(anyLong())).thenReturn(Optional.of(comment));
 //        when
-        Comment foundComment = commentService.findById(comment.getId()).get();
+        CommentDto foundComment = commentService.findById(comment.getId()).get();
 //        then
         assertThat(foundComment).isNotNull();
-        assertThat(foundComment).isEqualTo(comment);
+        assertThat(foundComment).isEqualTo(commentDto);
     }
     @DisplayName("testing finding comment by date")
     @Test
@@ -98,7 +101,7 @@ class CommentServiceTest {
 //        given
         when(commentRepository.findByDateAdded(LocalDate.of(2024, 5, 5))).thenReturn(List.of(comment));
 //        when
-        List<Comment> comments = commentService.findByDateAdded(LocalDate.of(2024, 5, 5));
+        List<CommentDto> comments = commentService.findByDateAdded(LocalDate.of(2024, 5, 5));
 //        then
         assertThat(comments).isNotEmpty();
         assertThat(comments.size()).isEqualTo(1);
@@ -109,7 +112,7 @@ class CommentServiceTest {
 //        given
         when(commentRepository.findByUserId(anyLong())).thenReturn(List.of(comment));
 //        when
-        List<Comment> comments = commentService.findByUserId(comment.getUserId());
+        List<CommentDto> comments = commentService.findByUserId(comment.getUserId());
 //        then
         assertThat(comments).isNotEmpty();
         assertThat(comments.size()).isEqualTo(1);

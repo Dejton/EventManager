@@ -25,6 +25,4 @@ public class Comment {
     private long userId;    // klucz obcy do User, jeden do wielu
     @Column(name = "event_id", nullable = false)
     private long eventId;   // klucz obcy do Event, jeden do wielu
-
-
 }

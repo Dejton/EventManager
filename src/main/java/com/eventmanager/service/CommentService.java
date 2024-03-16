@@ -1,6 +1,7 @@
 package com.eventmanager.service;
 
 import com.eventmanager.entity.Comment;
+import com.eventmanager.entity.dtos.CommentDto;
 import com.eventmanager.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -9,11 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentService {
-   Comment save(Comment comment);
+   Comment save(CommentDto comment);
    void deleteById(long id);
-   List<Comment> findAll();
-   Optional<Comment> findById(long id);
-    List<Comment> findByDateAdded(LocalDate dateAdded);
+   List<CommentDto> findAll();
+   Optional<CommentDto> findById(long id);
+    List<CommentDto> findByDateAdded(LocalDate dateAdded);
 
-    List<Comment> findByUserId(long userId);
+    List<CommentDto> findByUserId(long userId);
 }
