@@ -1,19 +1,20 @@
 package com.eventmanager.service;
 
 import com.eventmanager.entity.Event;
+import com.eventmanager.entity.dtos.EventDto;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface EventService {
-    Event save(Event event);
+    Event save(EventDto event);
     void deleteById(long id);
-    Optional<Event> findById(long id);
-    List<Event> findAll();
-    List<Event> findByStartingDate(LocalDate date);
+    Optional<EventDto> findById(long id);
+    List<EventDto> findAll();
+    List<EventDto> findByStartingDate(LocalDate date);
 
-    Event findByTitle(String title);
+    EventDto findByTitle(String title);
 
-    List<Event> findByLocalization(String localization);
+    List<EventDto> findByLocalization(String localization);
 }
