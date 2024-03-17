@@ -1,6 +1,7 @@
 package com.eventmanager.service;
 
 import com.eventmanager.entity.Event;
+import com.eventmanager.entity.dtos.EventDto;
 import com.eventmanager.repository.EventRepository;
 import com.eventmanager.service.impl.EventServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ class EventServiceTest {
     private final EventRepository eventRepository = mock(EventRepository.class);
     private final EventServiceImpl eventService = new EventServiceImpl(eventRepository);
     private Event event;
+    private EventDto eventDto;
 
 
     @BeforeEach
@@ -36,6 +38,7 @@ class EventServiceTest {
                 .startingDate(LocalDate.of(2024, 6, 12))
                 .endingDate(LocalDate.of(2024, 7, 12))
                 .build();
+        eventDto = EventDto.mapToDto(event);
     }
 
     @DisplayName("testing saving event")
@@ -44,7 +47,7 @@ class EventServiceTest {
 //        given
         when(eventRepository.save(any(Event.class))).thenReturn(event);
 //        when
-        Event savedEvent = eventService.save(event);
+        Event savedEvent = eventService.save(eventDto);
 //        then
         assertThat(savedEvent).isNotNull();
         assertThat(savedEvent).isEqualTo(event);
@@ -64,14 +67,15 @@ class EventServiceTest {
     @Test
     void shouldReturnUpdatedEvent() {
 //        given
-        when(eventRepository.save(event)).thenReturn(event);
+        when(eventRepository.save(any(Event.class))).thenReturn(event);
         event.setTitle("Slayer Mikołów station AKS");
         event.setLocalization("Kraków");
 //        when
-        Event updatedEvent = eventService.save(event);
+        Event updatedEvent = eventService.save(eventDto);
 //        then
         assertThat(updatedEvent).isNotNull();
-        assertThat(updatedEvent).isEqualTo(event);
+        assertThat(updatedEvent.getTitle()).isEqualTo("Slayer Mikołów station AKS");
+        assertThat(updatedEvent.getLocalization()).isEqualTo("Kraków");
     }
     @DisplayName("testing finding all events")
     @Test
@@ -86,7 +90,7 @@ class EventServiceTest {
                 .build();
         when(eventRepository.findAll()).thenReturn(List.of(event, event2));
 //        when
-        List<Event> events = eventService.findAll();
+        List<EventDto> events = eventService.findAll();
 //        then
         assertThat(events).isNotEmpty();
         assertThat(events.size()).isEqualTo(2);
@@ -97,10 +101,10 @@ class EventServiceTest {
 //        given
         when(eventRepository.findById(anyLong())).thenReturn(Optional.of(event));
 //        when
-        Optional<Event> foundEvent = eventService.findById(event.getId());
+        Optional<EventDto> foundEvent = eventService.findById(event.getId());
 //        then
         assertThat(foundEvent).isNotNull();
-        assertThat(foundEvent.get()).isEqualTo(event);
+        assertThat(foundEvent.get()).isEqualTo(eventDto);
     }
     @DisplayName("testing finding events by date")
     @Test
@@ -108,7 +112,7 @@ class EventServiceTest {
 //        given
         when(eventRepository.findByStartingDate(LocalDate.of(2024,6,12))).thenReturn(List.of(event));
 //        when
-        List<Event> events = eventService.findByStartingDate(LocalDate.of(2024, 6, 12));
+        List<EventDto> events = eventService.findByStartingDate(LocalDate.of(2024, 6, 12));
 //        then
         assertThat(events).isNotEmpty();
         assertThat(events.size()).isEqualTo(1);
@@ -119,10 +123,10 @@ class EventServiceTest {
 //        given
         when(eventRepository.findByTitle(anyString())).thenReturn(event);
 //        when
-        Event foundEvent = eventService.findByTitle("Rammstein Mikołów station AKS");
+        EventDto foundEvent = eventService.findByTitle("Rammstein Mikołów station AKS");
 //        then
         assertThat(foundEvent).isNotNull();
-        assertThat(foundEvent).isEqualTo(event);
+        assertThat(foundEvent).isEqualTo(eventDto);
     }
     @DisplayName("testing finding events by localization")
     @Test
@@ -130,7 +134,7 @@ class EventServiceTest {
 //        given
         when(eventRepository.findByLocalization(anyString())).thenReturn(List.of(event));
 //        when
-        List<Event> events = eventService.findByLocalization("Mikołów");
+        List<EventDto> events = eventService.findByLocalization("Mikołów");
 //        then
         assertThat(events).isNotEmpty();
         assertThat(events.size()).isEqualTo(1);

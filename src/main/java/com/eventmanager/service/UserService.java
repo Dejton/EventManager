@@ -1,18 +1,19 @@
 package com.eventmanager.service;
 
 import com.eventmanager.entity.User;
+import com.eventmanager.entity.dtos.UserDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
     void deleteById(long id);
-    Optional<User> findById(long id);
-    List<User> findAll();
-    User save(User user);
-    User findByLogin(String login);
+    Optional<UserDto> findById(long id);
+    List<UserDto> findAll();
+    User save(UserDto userDto);
+    UserDto findByLogin(String login);
 
-    List<User> findByDisplayName(String displayName);
+    List<UserDto> findByDisplayName(String displayName);
 
-    List<User> findByRole(String user);
+    List<UserDto> findByRole(String user);
 }

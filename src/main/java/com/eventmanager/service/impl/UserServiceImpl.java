@@ -1,6 +1,7 @@
 package com.eventmanager.service.impl;
 
 import com.eventmanager.entity.User;
+import com.eventmanager.entity.dtos.UserDto;
 import com.eventmanager.repository.UserRepository;
 import com.eventmanager.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,32 +18,42 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(long id) {
-        return userRepository.findById(id);
+    public Optional<UserDto> findById(long id) {
+        return Optional.of(UserDto.mapToDto(userRepository.findById(id).get()));
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAll() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserDto::mapToDto)
+                .toList();
     }
 
     @Override
-    public User save(User user) {
+    public User save(UserDto userDto) {
+        User user = UserDto.mapFromDto(userDto);
         return userRepository.save(user);
     }
 
     @Override
-    public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
+    public UserDto findByLogin(String login) {
+        return UserDto.mapToDto(userRepository.findByLogin(login));
     }
 
     @Override
-    public List<User> findByDisplayName(String displayName) {
-        return userRepository.findByDisplayName(displayName);
+    public List<UserDto> findByDisplayName(String displayName) {
+        List<User> users = userRepository.findByDisplayName(displayName);
+        return users.stream()
+                .map(UserDto::mapToDto)
+                .toList();
     }
 
     @Override
-    public List<User> findByRole(String role) {
-        return userRepository.findByRole(role);
+    public List<UserDto> findByRole(String role) {
+        List<User> users = userRepository.findByRole(role);
+        return users.stream()
+                .map(UserDto::mapToDto)
+                .toList();
     }
 }

@@ -1,6 +1,7 @@
 package com.eventmanager.service.impl;
 
 import com.eventmanager.entity.Event;
+import com.eventmanager.entity.dtos.EventDto;
 import com.eventmanager.repository.EventRepository;
 import com.eventmanager.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,8 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     @Override
-    public Event save(Event event) {
+    public Event save(EventDto eventDto) {
+        Event event = EventDto.mapFromDto(eventDto);
         return eventRepository.save(event);
     }
 
@@ -25,28 +27,37 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> findById(long id) {
-        return eventRepository.findById(id);
+    public Optional<EventDto> findById(long id) {
+        return Optional.of(EventDto.mapToDto(eventRepository.findById(id).get()));
     }
 
     @Override
-    public List<Event> findAll() {
-        return eventRepository.findAll();
+    public List<EventDto> findAll() {
+        List<Event> events = eventRepository.findAll();
+        return  events.stream()
+                .map(EventDto::mapToDto)
+                .toList();
     }
 
     @Override
-    public List<Event> findByStartingDate(LocalDate date) {
-        return eventRepository.findByStartingDate(date);
+    public List<EventDto> findByStartingDate(LocalDate date) {
+        List<Event> events = eventRepository.findByStartingDate(date);
+        return events.stream()
+                .map(EventDto::mapToDto)
+                .toList();
     }
 
     @Override
-    public Event findByTitle(String title) {
-        return eventRepository.findByTitle(title);
+    public EventDto findByTitle(String title) {
+        return EventDto.mapToDto(eventRepository.findByTitle(title));
     }
 
     @Override
-    public List<Event> findByLocalization(String localization) {
-        return eventRepository.findByLocalization(localization);
+    public List<EventDto> findByLocalization(String localization) {
+        List<Event> events = eventRepository.findByLocalization(localization);
+        return events.stream()
+                .map(EventDto::mapToDto)
+                .toList();
     }
 
 

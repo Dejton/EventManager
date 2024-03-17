@@ -1,6 +1,7 @@
 package com.eventmanager.service;
 
 import com.eventmanager.entity.User;
+import com.eventmanager.entity.dtos.UserDto;
 import com.eventmanager.repository.UserRepository;
 import com.eventmanager.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ class UserServiceTest {
     private final UserRepository userRepository = mock(UserRepository.class);
     private final UserServiceImpl userService = new UserServiceImpl(userRepository);
     private User user;
+    private UserDto userDto;
 
     @BeforeEach
     void setUp() {
@@ -32,6 +34,7 @@ class UserServiceTest {
                 .displayName("Dejton")
                 .role("user")
                 .build();
+        userDto = UserDto.mapToDto(user);
     }
     @DisplayName("testing saving user")
     @Test
@@ -39,7 +42,7 @@ class UserServiceTest {
 //        given
         when(userRepository.save(any(User.class))).thenReturn(user);
 //        when
-        User savedUser = userService.save(user);
+        User savedUser = userService.save(userDto);
 //        then
         assertThat(savedUser).isNotNull();
         assertThat(savedUser).isEqualTo(user);
@@ -63,7 +66,7 @@ class UserServiceTest {
         user.setPassword("1234");
         user.setDisplayName("Dejton666");
 //        when
-        User savedUser = userService.save(user);
+        User savedUser = userService.save(userDto);
 //        then
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getDisplayName()).isEqualTo("Dejton666");
@@ -75,7 +78,7 @@ class UserServiceTest {
 //        given
         when(userRepository.findAll()).thenReturn(List.of(user));
 //        when
-        List<User> users = userService.findAll();
+        List<UserDto> users = userService.findAll();
 //        then
         assertThat(users).isNotEmpty();
         assertThat(users.size()).isEqualTo(1);
@@ -86,10 +89,10 @@ class UserServiceTest {
 //        given
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 //        when
-        User foundUser = userService.findById(user.getId()).get();
+        UserDto foundUser = userService.findById(user.getId()).get();
 //        then
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser).isEqualTo(user);
+        assertThat(foundUser).isEqualTo(userDto);
     }
     @DisplayName("testing finding user by login")
     @Test
@@ -97,10 +100,10 @@ class UserServiceTest {
 //        given
         when(userRepository.findByLogin(anyString())).thenReturn(user);
 //        when
-        User foundUser = userService.findByLogin("Dejton94");
+        UserDto foundUser = userService.findByLogin("Dejton94");
 //        then
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser).isEqualTo(user);
+        assertThat(foundUser).isEqualTo(userDto);
     }
     @DisplayName("testing finding users by role")
     @Test
@@ -108,7 +111,7 @@ class UserServiceTest {
 //        given
         when(userRepository.findByRole(anyString())).thenReturn(List.of(user));
 //        when
-        List<User> users = userService.findByRole("user");
+        List<UserDto> users = userService.findByRole("user");
 //        then
         assertThat(users).isNotEmpty();
         assertThat(users.size()).isEqualTo(1);
@@ -119,7 +122,7 @@ class UserServiceTest {
 //        given
         when(userRepository.findByDisplayName(anyString())).thenReturn(List.of(user));
 //        when
-        List<User> users = userService.findByDisplayName("Dejton");
+        List<UserDto> users = userService.findByDisplayName("Dejton");
 //        then
         assertThat(users).isNotEmpty();
         assertThat(users.size()).isEqualTo(1);
