@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -94,7 +95,7 @@ class CommentControllerTest {
     @Test
     void shouldDeleteComment() throws Exception {
 //        given
-        given(commentService.save(commentDto)).willReturn(comment);
+        willDoNothing().given(commentService).deleteById(anyLong());
 //        when
         ResultActions response = mockMvc.perform(delete("/api/comments/{id}", comment.getId())
                 .contentType(MediaType.APPLICATION_JSON)

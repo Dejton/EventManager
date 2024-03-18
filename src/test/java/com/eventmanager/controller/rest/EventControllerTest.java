@@ -23,6 +23,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
@@ -96,7 +97,7 @@ class EventControllerTest {
     @Test
     void shouldDeleteEventById() throws Exception {
 //        given
-        given(eventService.save(any(EventDto.class))).willReturn(event);
+        willDoNothing().given(eventService).deleteById(anyLong());
 //        when
         ResultActions response = mockMvc.perform(delete("/api/events/{id}", event.getId())
                 .contentType(MediaType.APPLICATION_JSON)
