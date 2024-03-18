@@ -21,15 +21,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CommentControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired MockMvc mockMvc;
+    @Autowired
+    MockMvc mockMvc;
     @MockBean
     private CommentService commentService;
     private Comment comment;
@@ -54,6 +57,7 @@ class CommentControllerTest {
                 .build();
         commentDto = CommentDto.mapToDto(comment);
     }
+
     @DisplayName("testing adding new comment")
     @Test
     void shouldReturnSavedComment() throws Exception {
@@ -69,6 +73,7 @@ class CommentControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.content", is(comment.getContent())));
     }
+
     @DisplayName("testing finding all comments")
     @Test
     void shouldReturnListOfCommentsDto() throws Exception {
@@ -76,6 +81,71 @@ class CommentControllerTest {
         given(commentService.findAll()).willReturn(List.of(commentDto));
 //        when
         ResultActions response = mockMvc.perform(get("/api/comments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentDto))
+        );
+//        then
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(1)));
+    }
+
+    @DisplayName("testing deleting comment by id")
+    @Test
+    void shouldDeleteComment() throws Exception {
+//        given
+        given(commentService.save(commentDto)).willReturn(comment);
+//        when
+        ResultActions response = mockMvc.perform(delete("/api/comments/{id}", comment.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(comment))
+        );
+//        then
+        response.andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("testing finding comment by id")
+    @Test
+    void shouldReturnCommentDtoById() throws Exception {
+//        given
+        given(commentService.findById(anyLong())).willReturn(Optional.of(commentDto));
+//        when
+        ResultActions response = mockMvc.perform(get("/api/comments/{id}", commentDto.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentDto))
+        );
+//        then
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", is(commentDto.getContent())))
+                .andExpect(jsonPath("$.id").value("0"))
+                .andExpect(jsonPath("$.dateAdded", is(String.valueOf(commentDto.getDateAdded()))));
+    }
+
+    @DisplayName("testing finding comment by date added")
+    @Test
+    void shouldReturnCommentByDateAdded() throws Exception {
+//        given
+        given(commentService.findByDateAdded(LocalDate.of(2024, 5, 5))).willReturn(List.of(commentDto));
+//        when
+        ResultActions response = mockMvc.perform(get("/api/comments/date/{date}", commentDto.getDateAdded())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentDto))
+        );
+//        then
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(1)));
+    }
+
+    @DisplayName("testing finding comment by user id")
+    @Test
+    void shouldReturnCommentByUserId() throws Exception {
+//        given
+        given(commentService.findByUserId(anyLong())).willReturn(List.of(commentDto));
+//        when
+        ResultActions response = mockMvc.perform(get("/api/comments/user/{id}", commentDto.getUserId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentDto))
         );

@@ -13,7 +13,6 @@ public interface EventService {
     Optional<EventDto> findById(long id);
     List<EventDto> findAll();
     List<EventDto> findByStartingDate(LocalDate date);
-
     EventDto findByTitle(String title);
 
     List<EventDto> findByLocalization(String localization);

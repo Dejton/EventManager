@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,5 +26,21 @@ public class CommentController {
     @GetMapping
     public List<CommentDto> getAll() {
         return commentService.findAll();
+    }
+    @DeleteMapping("/{id}")
+    public void deleteComment(@PathVariable long id) {
+        commentService.deleteById(id);
+    }
+    @GetMapping("/{id}")
+    public Optional<CommentDto> getById(@PathVariable long id) {
+        return commentService.findById(id);
+    }
+    @GetMapping("/date/{date}")
+    public List<CommentDto> getByDateAdded(@PathVariable LocalDate date) {
+        return commentService.findByDateAdded(date);
+    }
+    @GetMapping("user/{id}")
+    public List<CommentDto> getByUserId(@PathVariable long id) {
+        return commentService.findByUserId(id);
     }
 }
