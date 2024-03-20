@@ -78,11 +78,26 @@ class EventControllerTest {
 
     }
 
-    @DisplayName("testing finding all events")
+//    @DisplayName("testing finding all events")
+//    @Test
+//    void shouldReturnAllEvents() throws Exception {
+////        given
+//        given(eventService.findAll()).willReturn(List.of(eventDto));
+////        when
+//        ResultActions response = mockMvc.perform(get("/api/events")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(eventDto))
+//        );
+////        then
+//        response.andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.size()", is(1)));
+//    }
+    @DisplayName("testing finding first 20 events")
     @Test
-    void shouldReturnAllEvents() throws Exception {
+    void shouldReturnFirst20Events() throws Exception {
 //        given
-        given(eventService.findAll()).willReturn(List.of(eventDto));
+        given(eventService.findFirstTwentyActualEvents()).willReturn(List.of(eventDto));
 //        when
         ResultActions response = mockMvc.perform(get("/api/events")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -164,6 +179,22 @@ class EventControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(1)))
                 .andExpect(jsonPath("$[0].title", is(eventDto.getTitle())));
+    }
+    @DisplayName("testing finding events by startingDateString")
+    @Test
+    void shouldReturnListOfEventDtoByStartingDateString() throws Exception {
+//        given
+        given(eventService.findByStartingDateString("2024-06-12")).willReturn(List.of(eventDto));
+//        when
+        ResultActions response = mockMvc.perform(get("/api/events/date/{date}", "2024-06-12")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(event))
+        );
+//        then
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(1)))
+                .andExpect(jsonPath("$[0].id").value(eventDto.getId()));
     }
 }
 

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +49,18 @@ public class CommentServiceImpl implements CommentService {
         return comments.stream()
                 .map(CommentDto::mapToDto)
                 .toList();
+    }
+
+    @Override
+    public List<CommentDto> findByDateAddedString(String dateString) {
+        try {
+            LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyy-MM-dd"));
+            return findByDateAdded(date);
+        } catch (DateTimeParseException e) {
+            System.err.println("Nie można przekonwertować daty. Nieprawidłowy format: " + dateString);
+            return null;
+        }
+
     }
 
     @Override

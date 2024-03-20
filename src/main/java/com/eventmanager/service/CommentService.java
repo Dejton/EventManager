@@ -15,6 +15,6 @@ public interface CommentService {
    List<CommentDto> findAll();
    Optional<CommentDto> findById(long id);
     List<CommentDto> findByDateAdded(LocalDate dateAdded);
-
+    List<CommentDto> findByDateAddedString(String date);
     List<CommentDto> findByUserId(long userId);
 }

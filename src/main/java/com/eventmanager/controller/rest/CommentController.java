@@ -36,8 +36,8 @@ public class CommentController {
         return commentService.findById(id);
     }
     @GetMapping("/date/{date}")
-    public List<CommentDto> getByDateAdded(@PathVariable LocalDate date) {
-        return commentService.findByDateAdded(date);
+    public List<CommentDto> getByDateAddedString(@PathVariable String date) {
+        return commentService.findByDateAddedString(date);
     }
     @GetMapping("user/{id}")
     public List<CommentDto> getByUserId(@PathVariable long id) {

@@ -9,6 +9,5 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findByDateAdded(LocalDate dateAdded);
-
     List<Comment> findByUserId(long userId);
 }

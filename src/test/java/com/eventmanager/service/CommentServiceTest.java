@@ -12,10 +12,12 @@ import org.mockito.configuration.IMockitoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -105,6 +107,29 @@ class CommentServiceTest {
 //        then
         assertThat(comments).isNotEmpty();
         assertThat(comments.size()).isEqualTo(1);
+    }
+    @DisplayName("testing finding comments by dateSAddedString")
+    @Test
+    void shouldReturnListOfCommentDtoByDateAddedString() {
+//        given
+        when(commentRepository.findByDateAdded(LocalDate.of(2024, 5, 5))).thenReturn(List.of(comment));
+//        when
+        List<CommentDto> comments = commentService.findByDateAddedString("2024-05-05");
+//        then
+        assertThat(comments.size()).isEqualTo(1);
+        assertThat(comments.get(0)).isEqualTo(commentDto);
+    }
+    @DisplayName("testing finding comments by dateAddedString with wrong date")
+    @Test
+    void shouldThrowExceptionWithWornDateFormat() {
+//        given
+        when(commentRepository.findByDateAdded(LocalDate.of(2024, 5, 5))).thenReturn(List.of(comment));
+//        when
+//        then
+//        assertThatThrownBy()
+        assertThrows(DateTimeParseException.class, () -> {
+            commentService.findByDateAddedString("2024,05,05");
+        });
     }
     @DisplayName("testing finding comments by user")
     @Test

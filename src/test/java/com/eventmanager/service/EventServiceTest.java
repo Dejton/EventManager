@@ -117,6 +117,41 @@ class EventServiceTest {
         assertThat(events).isNotEmpty();
         assertThat(events.size()).isEqualTo(1);
     }
+    @DisplayName("testing finding events by starting date string")
+    @Test
+    void shouldReturnListOfEventDtoByStaringDateString() {
+//        given
+        when(eventRepository.findByStartingDate(LocalDate.of(2024,6,12))).thenReturn(List.of(event));
+//        when
+        List<EventDto> events = eventService.findByStartingDateString("2024-06-12");
+//        then
+        assertThat(events.size()).isEqualTo(1);
+        assertThat(events.get(0)).isEqualTo(eventDto);
+    }
+    @DisplayName("testing finding first 20 events by date")
+    @Test
+    void shouldReturnListOfFirstTwentyEventsSortedByDate() {
+//        given
+        Event event1 = event = Event.builder()
+                .localization("Mikołów")
+                .title("Slayer Mikołów station AKS")
+                .description("Jak co roku zespół Rammstein zagości na stadionie piłkarskim AKS Mikołów ale dać wspaniałe show. Będą liczne atrakcje dla dzieci, grill i budki z piwem.")
+                .startingDate(LocalDate.of(2024, 7, 12))
+                .endingDate(LocalDate.of(2024, 9, 12))
+                .build();
+        Event event2 = event = Event.builder()
+                .localization("Mikołów")
+                .title("Scorpions Mikołów station AKS")
+                .description("Jak co roku zespół Rammstein zagości na stadionie piłkarskim AKS Mikołów ale dać wspaniałe show. Będą liczne atrakcje dla dzieci, grill i budki z piwem.")
+                .startingDate(LocalDate.of(2024, 9, 12))
+                .endingDate(LocalDate.of(2024, 7, 12))
+                .build();
+        when(eventRepository.findAll()).thenReturn(List.of(event, event1, event2));
+//        when
+        List<EventDto> events = eventService.findFirstTwentyActualEvents();
+//        then
+        assertThat(events.size()).isEqualTo(2);
+    }
     @DisplayName("testing finding event by title")
     @Test
     void shouldReturnEventByTitle() {

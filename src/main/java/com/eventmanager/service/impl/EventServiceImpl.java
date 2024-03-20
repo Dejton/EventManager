@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +43,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<EventDto> findFirstTwentyActualEvents() {
+        List<Event> events = eventRepository.findAll();
+        return events.stream()
+                .sorted(Comparator.comparing(Event::getStartingDate))
+                .limit(20)
+                .map(EventDto::mapToDto)
+                .toList();
+    }
+
+    @Override
     public List<EventDto> findByStartingDate(LocalDate date) {
         List<Event> events = eventRepository.findByStartingDate(date);
         return events.stream()
@@ -50,6 +63,18 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto findByTitle(String title) {
         return EventDto.mapToDto(eventRepository.findByTitle(title));
+    }
+
+    @Override
+    public List<EventDto> findByStartingDateString(String dateString) {
+
+        try {
+            LocalDate events = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return findByStartingDate(events);
+        } catch (DateTimeParseException e) {
+            System.err.println("Nie można przekonwertować daty. Nieprawidłowy format: " + dateString);
+            return null;
+        }
     }
 
     @Override

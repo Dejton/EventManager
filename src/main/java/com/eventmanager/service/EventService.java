@@ -12,8 +12,10 @@ public interface EventService {
     void deleteById(long id);
     Optional<EventDto> findById(long id);
     List<EventDto> findAll();
+    List<EventDto> findFirstTwentyActualEvents();
     List<EventDto> findByStartingDate(LocalDate date);
     EventDto findByTitle(String title);
+    List<EventDto> findByStartingDateString(String date);
 
     List<EventDto> findByLocalization(String localization);
 }

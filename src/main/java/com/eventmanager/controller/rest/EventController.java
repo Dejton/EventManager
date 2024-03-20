@@ -22,8 +22,8 @@ public class EventController {
         return eventService.save(eventDto);
     }
     @GetMapping
-    public List<EventDto> getAll() {
-        return eventService.findAll();
+    public List<EventDto> getFirst20() {
+        return eventService.findFirstTwentyActualEvents();
     }
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable long id) {
@@ -40,5 +40,9 @@ public class EventController {
     @GetMapping("/localization/{localization}")
     public List<EventDto> getByLocalization(@PathVariable String localization) {
         return eventService.findByLocalization(localization);
+    }
+    @GetMapping("/date/{date}")
+    public List<EventDto> getByStartingDateString(@PathVariable String date) {
+        return eventService.findByStartingDateString(date);
     }
 }

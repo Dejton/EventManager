@@ -128,9 +128,9 @@ class CommentControllerTest {
     @Test
     void shouldReturnCommentByDateAdded() throws Exception {
 //        given
-        given(commentService.findByDateAdded(LocalDate.of(2024, 5, 5))).willReturn(List.of(commentDto));
+        given(commentService.findByDateAddedString("2024-05-05")).willReturn(List.of(commentDto));
 //        when
-        ResultActions response = mockMvc.perform(get("/api/comments/date/{date}", commentDto.getDateAdded())
+        ResultActions response = mockMvc.perform(get("/api/comments/date/{date}", "2024-05-05")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentDto))
         );
