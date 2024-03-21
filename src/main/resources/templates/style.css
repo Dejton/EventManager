@@ -1,0 +1,192 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+/* .chau-philomene one-regular {
+  font-family: "Chau Philomene One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.chau-philomene one-regular-italic {
+  font-family: "Chau Philomene One", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+} */
+
+.page {
+    width: 70em;
+    height: 100em;
+    background-color: #4CCD99;
+    margin: 0 auto;
+}
+.navbar {
+    z-index: 99999;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+    background-color: #FFC700;
+    position: fixed;
+}
+
+.btns {
+    /*   background-color: white; */
+    padding: 13px;
+    margin-right: 15px
+}
+.btn_navbar {
+    font-family: "Chau Philomene One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    margin-left: 7px;
+    display: inline-block;
+    padding: 5px 24px;
+    border: 1px solid #4f4f4f;
+    border-radius: 4px;
+    transition: all 0.2s ease-in;
+    position: relative;
+    overflow: hidden;
+    font-size: 16px;
+    cursor: pointer;
+    color: black;
+    z-index: 1;
+}
+
+.btn_navbar:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.25);
+    top: 100%;
+    width: 140%;
+    height: 180%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+}
+
+.btn_navbar:after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    transform: translateX(-50%) scaleY(1) scaleX(1.45);
+    top: 180%;
+    width: 160%;
+    height: 190%;
+    background-color: #007F73;
+    border-radius: 50%;
+    display: block;
+    transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+    z-index: -1;
+}
+
+.btn_navbar:hover {
+    color: #ffffff;
+    border: 1px solid #39bda7;
+}
+
+.btn_navbar:hover:before {
+    top: -35%;
+    background-color: #007F73;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+
+.btn_navbar:hover:after {
+    top: -45%;
+    background-color: #007F73;
+    transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
+}
+
+.page_title {
+    font-family: "Chau Philomene One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-style: italic;
+    font-size: 50px;
+    margin-left: 30px;
+    margin-top: 0;
+}
+/* this card is inspired form this - https://georgefrancis.dev/ */
+
+.card {
+    --border-radius: 0.75rem;
+    --primary-color: #7257fa;
+    --secondary-color: #3c3852;
+    margin: 30px auto;
+    width: 90%;
+    font-family: "Arial";
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    background: #f1f1f3;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
+    position: relative;
+}
+
+.card > * + * {
+    margin-top: 1.1em;
+}
+
+.card .card__content {
+    color: var(--secondary-color);
+    font-size: 0.86rem;
+}
+
+.card .card__title {
+    padding: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.card .card__date {
+    color: #6e6b80;
+    font-size: 0.8rem;
+}
+
+.card .card__arrow {
+    position: absolute;
+    background: var(--primary-color);
+    padding: 0.4rem;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    bottom: 0;
+    right: 0;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card svg {
+    transition: 0.2s;
+}
+
+/* hover */
+.card:hover .card__title {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.card:hover .card__arrow {
+    background: #111;
+}
+
+.card:hover .card__arrow svg {
+    transform: translateX(3px);
+}
+.ul_events {
+    list-style-type: none;
+    margin: 0;
+}
+.events {
+    padding-top: 60px;
+    width: 80%;
+    height: 95%;
+    margin: 0 auto;
+    background-color: white;
+}
